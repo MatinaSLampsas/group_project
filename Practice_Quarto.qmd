@@ -1,5 +1,6 @@
 ---
 title: "Group Project"
+author: "Katrina, Matina, Lindsey, Kaviya"
 format: html
 editor: visual
 ---
