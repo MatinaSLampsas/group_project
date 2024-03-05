@@ -14,7 +14,10 @@ library(janitor)
 ```
 
 ```{r}
+library(tidyverse)
 
+life_exp <-read_csv(here::here("life_expectancy_at_birth.csv"))
+carbon <-read_csv(here::here("co2_emissions_tonnes_per_person.csv"))
 
 ```
 
