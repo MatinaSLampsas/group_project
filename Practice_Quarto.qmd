@@ -5,26 +5,23 @@ format: html
 editor: visual
 self-contained: true
 ---
+
 ```{r}
 library(tidyverse)
+library(janitor)
+
 
 ```
-
-
-
 
 ```{r}
-life_exp <- read_csv("https://github.com/MatinaSLampsas/group_project/blob/main/life_expectancy_at_birth.csv") 
 
-carbon <- read_csv("https://github.com/MatinaSLampsas/group_project/blob/main/life_expectancy_at_birth.csv") 
 
 ```
-
 
 When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
 
 ```{r}
-1 + 1
+life_exp
 ```
 
 You can add options to executable code like this
