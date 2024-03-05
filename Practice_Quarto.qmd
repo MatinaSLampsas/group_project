@@ -5,13 +5,18 @@ format: html
 editor: visual
 self-contained: true
 ---
+```{r}
+library(tidyverse)
+
+```
+
+
+
 
 ```{r}
-life_exp <- read.csv("https://github.com/MatinaSLampsas/group_project/blob/main/life_expectancy_at_birth.csv") |> 
-  janitor::clean_names()
+life_exp <- read_csv("https://github.com/MatinaSLampsas/group_project/blob/main/life_expectancy_at_birth.csv") 
 
-carbon <- read.csv("https://github.com/MatinaSLampsas/group_project/blob/main/life_expectancy_at_birth.csv") |>
-  janitor::clean_names()
+carbon <- read_csv("https://github.com/MatinaSLampsas/group_project/blob/main/life_expectancy_at_birth.csv") 
 
 ```
 
