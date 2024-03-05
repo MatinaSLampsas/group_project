@@ -30,7 +30,7 @@ carbon <-read_csv(here::here("co2_pcap_cons.csv"))
 clean_carbon <- carbon %>% 
    mutate(across(.col=`2000`:`2022`, .fns= ~ as.numeric(.x))) %>% 
   na.omit() %>% 
-  select (`2000`:`2022`)
+  select (C("country",`2000`:`2022`))
   
 
 clean_carbon
