@@ -14,7 +14,6 @@ library(janitor)
 ```
 
 ```{r}
-library(tidyverse)
 
 # Load in the life expectancy csv
 life_exp <-read_csv(here::here("life_expectancy_at_birth.csv"))
@@ -28,11 +27,16 @@ carbon <-read_csv(here::here("co2_pcap_cons.csv"))
 ```{r}
 #cleaning carbon
 clean_carbon <- carbon %>% 
-   mutate(across(.col=`2000`:`2022`, .fns= ~ as.numeric(.x))) %>% 
   na.omit() %>% 
-  select (C("country",`2000`:`2022`))
-  
+  mutate(across(.cols = `2000`:`2022`, 
+                .fns = as.numeric)) %>% 
+  select(country, `2000`:`2022`)
 
-clean_carbon
+clean_le <- life_exp %>% 
+  na.omit() %>% 
+  mutate(across(.cols = `2000`:`2022`, 
+                .fns = as.numeric)) %>% 
+  select(country, `2000`:`2022`)
+
 ```
 
