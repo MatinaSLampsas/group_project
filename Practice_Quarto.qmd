@@ -20,21 +20,19 @@ library(tidyverse)
 life_exp <-read_csv(here::here("life_expectancy_at_birth.csv"))
 
 #load in the carbon emissions data 
-carbon <-read_csv(here::here("co2_emissions_tonnes_per_person.csv"))
+carbon <-read_csv(here::here("co2_pcap_cons.csv"))
 
 ```
 
-When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
-
+## DATA CLEANING
 ```{r}
-life_exp
+#cleaning carbon
+clean_carbon <- carbon %>% 
+   mutate(across(.col=`2000`:`2022`, .fns= ~ as.numeric(.x))) %>% 
+  na.omit() %>% 
+  select (`2000`:`2022`)
+  
+
+clean_carbon
 ```
 
-You can add options to executable code like this
-
-```{r}
-#| echo: false
-2 * 2
-```
-
-The `echo: false` option disables the printing of code (only output is displayed).
