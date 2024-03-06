@@ -1,9 +1,18 @@
 ---
 title: "STAT 331 Group Project"
 author: "Katrina, Matina, Lindsey, Kaviya"
-format: html
-editor: visual
-self-contained: true
+format: 
+  html:
+    self-contained: true
+    embed-resources: true
+    code-tools: true
+    toc: true
+editor: source
+execute: 
+  error: true
+  echo: true
+  message: false
+  warning: false
 ---
 
 ## Our Hypothesis
@@ -57,23 +66,23 @@ clean_life_exp <- life_exp %>%
 clean_carbon <- clean_carbon %>%
   pivot_longer(cols = !country,
                names_to = "year",
-               values_to = "carbon_emissions")
+               values_to = "carbon_emissions_tonnes")
 
 
 # Pivot longer the clean life expectancy data:
 clean_life_exp <- clean_life_exp %>%
   pivot_longer(cols = !country,
                names_to = "year",
-               values_to = "carbon_emissions")
-
-
+               values_to = "life_expectancy_years")
 ```
 
 
-## Joining the Data Sets:
+## Joining the Data Sets
 
 ```{r}
 #joining the two cleaned data sets 
 joined_data <- left_join(clean_carbon, clean_life_exp, by = c("country", "year"))
+
+rmarkdown::paged_table((joined_data))
 ```
 
