@@ -41,7 +41,7 @@ clean_life_exp <- life_exp %>%
 
 ```
 
-## Pivot the Data Longer: 
+## Pivot the Data Longer:
 
 ```{r}
 # Pivot longer the clean carbon data: 
