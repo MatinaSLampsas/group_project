@@ -48,12 +48,8 @@ clean_life_exp <- life_exp %>%
                 .fns = ~as.numeric(.x))) %>% 
   select(country, `2000`:`2022`)
 ```
-<<<<<<< HEAD
 
-## Pivot the Data Longer:
-=======
 ## Pivot the Data Longer
->>>>>>> dae78a01686cdbe0122003a556cc90e654b7aa3c
 
 ```{r}
 # Pivot longer the clean carbon data: 
