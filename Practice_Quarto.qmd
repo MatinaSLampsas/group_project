@@ -41,7 +41,7 @@ clean_life_exp <- life_exp %>%
 
 ```
 
-## Pivot the Data Longer: 
+## Pivot the Data Longer:
 
 ```{r}
 # Pivot longer the clean carbon data: 
@@ -58,4 +58,11 @@ clean_life_exp <- clean_life_exp %>%
                values_to = "carbon_emissions")
 
 
+```
+
+## Joining the Data Sets:
+
+```{r}
+#joining the two cleaned data sets
+joined_data <- left_join(clean_carbon, clean_life_exp, by = c("country", "year"))
 ```
