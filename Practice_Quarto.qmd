@@ -24,19 +24,38 @@ carbon <-read_csv(here::here("co2_pcap_cons.csv"))
 ```
 
 ## DATA CLEANING
+
 ```{r}
 #cleaning carbon
 clean_carbon <- carbon %>% 
   na.omit() %>% 
   mutate(across(.cols = `2000`:`2022`, 
-                .fns = as.numeric)) %>% 
+                .fns = ~as.numeric(.x))) %>% 
   select(country, `2000`:`2022`)
 
-clean_le <- life_exp %>% 
+clean_life_exp <- life_exp %>% 
   na.omit() %>% 
   mutate(across(.cols = `2000`:`2022`, 
-                .fns = as.numeric)) %>% 
+                .fns = ~as.numeric(.x))) %>% 
   select(country, `2000`:`2022`)
 
 ```
 
+## Pivot the Data Longer: 
+
+```{r}
+# Pivot longer the clean carbon data: 
+clean_carbon <- clean_carbon %>%
+  pivot_longer(cols = !country,
+               names_to = "year",
+               values_to = "carbon_emissions")
+
+
+# Pivot longer the clean life expectancy data:
+clean_life_exp <- clean_life_exp %>%
+  pivot_longer(cols = !country,
+               names_to = "year",
+               values_to = "carbon_emissions")
+
+
+```
