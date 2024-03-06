@@ -49,9 +49,13 @@ clean_life_exp <- life_exp %>%
   select(country, `2000`:`2022`)
 ```
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 ## Pivot the Data Longer:
 =======
+=======
+
+>>>>>>> 5cb84fa4eb2fd3469c7247e0413aae15096d25d4
 ## Pivot the Data Longer
 >>>>>>> dae78a01686cdbe0122003a556cc90e654b7aa3c
 
