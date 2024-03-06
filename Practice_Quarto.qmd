@@ -32,6 +32,7 @@ life_exp <-read_csv(here::here("life_expectancy_at_birth.csv"))
 carbon <-read_csv(here::here("co2_pcap_cons.csv"))
 
 ```
+
 ## Data Cleaning
 
 ```{r}
@@ -48,16 +49,8 @@ clean_life_exp <- life_exp %>%
                 .fns = ~as.numeric(.x))) %>% 
   select(country, `2000`:`2022`)
 ```
-<<<<<<< HEAD
-<<<<<<< HEAD
 
-## Pivot the Data Longer:
-=======
-=======
-
->>>>>>> 5cb84fa4eb2fd3469c7247e0413aae15096d25d4
 ## Pivot the Data Longer
->>>>>>> dae78a01686cdbe0122003a556cc90e654b7aa3c
 
 ```{r}
 # Pivot longer the clean carbon data: 
@@ -76,12 +69,11 @@ clean_life_exp <- clean_life_exp %>%
 
 ```
 
-<<<<<<< HEAD
+
 ## Joining the Data Sets:
 
 ```{r}
 #joining the two cleaned data sets 
 joined_data <- left_join(clean_carbon, clean_life_exp, by = c("country", "year"))
 ```
-=======
->>>>>>> dae78a01686cdbe0122003a556cc90e654b7aa3c
+
