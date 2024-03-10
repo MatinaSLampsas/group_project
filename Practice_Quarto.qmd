@@ -78,7 +78,6 @@ clean_life_exp <- clean_life_exp %>%
                values_to = "life_expectancy_years")
 ```
 
-
 ## Joining the Data Sets:
 
 ```{r}
@@ -86,4 +85,10 @@ clean_life_exp <- clean_life_exp %>%
 joined_data <- left_join(clean_carbon, clean_life_exp, by = c("country", "year"))
 
 rmarkdown::paged_table((joined_data))
+```
+
+# Linear Regression
+
+```{r}
+
 ```
