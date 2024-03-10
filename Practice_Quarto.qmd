@@ -7,10 +7,12 @@ self-contained: true
 ---
 
 ## Our Hypothesis
+
 Higher CO2 emissions per capita are associated with lower life expectancy.
 
 ## About the Data
-The data consists of two datasets that come from [Gapminder](https://www.gapminder.org/data/): Life Expectancy (`life_expectancy_at_birth.csv`) and Consumption-Based CO2 Emissions Per Capita (`co2_pcap_cons.csv`). 
+
+The data consists of two datasets that come from [Gapminder](https://www.gapminder.org/data/): Life Expectancy (`life_expectancy_at_birth.csv`) and Consumption-Based CO2 Emissions Per Capita (`co2_pcap_cons.csv`).
 
 In the dataset for Life Expectancy (`life_expectancy_at_birth.csv`), the data collected includes the number of years a newborn infant would live if the current mortality rates at different ages were to stay the same throughout its life across different countries. The dataset originally had 195 rows and 302 columns. After filtering and cleaning, the data consists of 186 rows and 24 columns with mainly double data types. Each row represents a country, with each column representing the life expectancy for a particular country across years from 2000 to 2022. More information about this dataset and its documentation can be found here: [Life Expectancy](https://www.gapminder.org/data/documentation/gd004/).
 
@@ -69,11 +71,9 @@ clean_life_exp <- clean_life_exp %>%
 
 ```
 
-
 ## Joining the Data Sets:
 
 ```{r}
 #joining the two cleaned data sets 
 joined_data <- left_join(clean_carbon, clean_life_exp, by = c("country", "year"))
 ```
-
