@@ -7,7 +7,7 @@ format:
     embed-resources: true
     code-tools: true
     toc: true
-editor: source
+editor: visual
 execute: 
   error: true
   echo: true
@@ -78,12 +78,8 @@ clean_life_exp <- clean_life_exp %>%
                values_to = "life_expectancy_years")
 ```
 
-<<<<<<< HEAD
-## Joining the Data Sets:
-=======
 
-## Joining the Data Sets
->>>>>>> dcb2d2b647f21bc9389f58a3ec6bb2daf6bb3a60
+## Joining the Data Sets:
 
 ```{r}
 #joining the two cleaned data sets 
