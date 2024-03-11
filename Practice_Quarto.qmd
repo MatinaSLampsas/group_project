@@ -89,18 +89,105 @@ rmarkdown::paged_table((joined_data))
 
 # Linear Regression
 
+### Visual 1 Table
+
 ```{r}
+#The relationship between the two quantitative variables changing over time. 
+
+vis_1_df <-
+joined_data %>% 
+  mutate(carbon_emissions_tonnes = 
+            case_when(carbon_emissions_tonnes < 2 ~ "< 2 tonnes",
+            carbon_emissions_tonnes >2 & carbon_emissions_tonnes<5 ~ "2-5 tonnes",
+            carbon_emissions_tonnes > 5 ~ ">5 tonnes")) %>% 
+  drop_na() %>%
+  mutate(year=as.numeric(year))
+vis_1_df
+```
+
+### Visual 2 Table
+
+```{r}
+
+
 #finding the countries with the top 10 carbon emissions over 22 year average
 top_ten_carbon <- joined_data %>% 
   group_by(country) %>% 
-  summarise(avg_crbn = mean(carbon_emissions_tonnes),
-         avg_life = mean(life_expectancy_years)) %>%
+  summarise(avg_crbn = mean(carbon_emissions_tonnes, na.rm=T),
+         avg_life = mean(life_expectancy_years, na.rm=T)) %>%
   #slicing the countries with the top 10 carbon emissions so we can see what they are and how the life expectance vs carbon emissions changes over time
   slice_max(avg_crbn, n=10) %>% 
   arrange(desc(avg_crbn))
 
 ```
 
+# Data Visuals
+
+### Data Visual 1
+
+```{r}
+joined_data %>% 
+  mutate(year = as.numeric(year)) %>% 
+  ggplot(mapping = aes (x = year,
+                        y = life_expectancy_years, 
+                        alpha = carbon_emissions_tonnes)) +
+  geom_jitter() + 
+  scale_color_brewer(palette = "Dark2") +
+  labs(x = "Consumption-Based CO2 Emissions Per Capita",
+       subtitle = "Average Life Expectancy",
+       y = "") +
+  scale_x_continuous(limits=c(2000,2022),
+                     breaks = seq(2000, 2022, 2)) +
+  theme_bw()
+```
+
+### or Data visualization 1 alternative???
+
+The fct_reorder isn't working as it should be!!
+
 ```{r}
 
+vis_1_df %>%  
+  ggplot(mapping = aes (x = year,
+                        y = life_expectancy_years,
+                       color= fct_reorder2(.f = carbon_emissions_tonnes,
+                             .x = year,
+                             .y = life_expectancy_years))) +
+  geom_jitter(alpha = 0.1) + 
+  geom_smooth(method = "loess") +
+  scale_color_brewer(palette = "Dark2") +
+  labs(x = "Year",
+       subtitle = "Life Expectancy",
+       y = "",
+       color = "CO2 Emissions Per Capita") +
+  scale_x_continuous(limits=c(2000,2022),
+                     breaks = seq(2000, 2022, 2)) +
+  theme_bw()
+
+ 
+
+```
+
+### Data Visualization 2
+
+So this is just the general carbon emission vs life expectancy graph without considering the countries with the top ten carbon emissions
+
+```{r}
+joined_data %>% 
+  ggplot(mapping = aes(x = carbon_emissions_tonnes,
+                       y = life_expectancy_years)) +
+  geom_jitter(alpha = 0.1) +
+  geom_smooth(method = "loess")
+```
+
+### OR alternative visual 2 (with the top 10 carbon emission countries)
+
+The issue with this graph is that there isn't enough points to really give us a lot of info unless we change up the table or use a different type of graph
+
+```{r}
+top_ten_carbon %>% 
+  ggplot(mapping = aes(x = avg_crbn,
+                       y = avg_life,
+                       color = country)) +
+  geom_point() 
 ```
