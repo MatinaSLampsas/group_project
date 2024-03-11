@@ -90,5 +90,17 @@ rmarkdown::paged_table((joined_data))
 # Linear Regression
 
 ```{r}
+#finding the countries with the top 10 carbon emissions over 22 year average
+top_ten_carbon <- joined_data %>% 
+  group_by(country) %>% 
+  summarise(avg_crbn = mean(carbon_emissions_tonnes),
+         avg_life = mean(life_expectancy_years)) %>%
+  #slicing the countries with the top 10 carbon emissions so we can see what they are and how the life expectance vs carbon emissions changes over time
+  slice_max(avg_crbn, n=10) %>% 
+  arrange(desc(avg_crbn))
+
+```
+
+```{r}
 
 ```
