@@ -210,23 +210,24 @@ lm_crbn_life
 
 ```{r}
 lm_crbn_life %>% 
-  ggplot(aes( x = .resid, y=.fitted))+
+  ggplot(aes( x = .fitted, y=.resid))+
   geom_jitter()+
-  geom_smooth(method = "lm")
+  geom_smooth(method = "loess")
 ```
 
 ## Model Fit
 
 Using the values from the regression model, the table is constructed below with the following data:
 
-- `var_y` represents the variance in the response values
-- `var_y_hat` represents the variance in the fitted values
-- `var_residual` represents the variance in the residuals
-- `r_squared`represents the proportion of the spread/variation of the outcome variable `avg_life` explained by the model
+-   `var_y` represents the variance in the response values
+-   `var_y_hat` represents the variance in the fitted values
+-   `var_residual` represents the variance in the residuals
+-   `r_squared`represents the proportion of the spread/variation of the outcome variable `avg_life` explained by the model
 
 To evaluate the quality of the regression model, we compute the R^2^ value. The R^2^ value for the regression model is approximately 0.342. This means that around 34.2% of the variability in the response values is accounted for by the model.
 
 In terms of the "quality" of the model, this suggests a moderate level of fit. While the model does explain some of the variance in the response variable, a significant portion (approximately 65.8%) of the variance is not explained by the model. This could mean that there are other variables not included in the model that are influencing the response, or that the model is not capturing the relationship between the variables effectively.
+
 ```{r}
 library(moderndive)
 
@@ -238,4 +239,3 @@ model_fit <- get_regression_points(lm_crbn_life) %>%
 
 knitr::kable((model_fit),format = "html")
 ```
-
