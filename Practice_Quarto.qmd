@@ -109,8 +109,6 @@ vis_1_df
 ### Visual 2 Table
 
 ```{r}
-
-
 #finding the countries with the top 10 carbon emissions over 22 year average
 top_ten_carbon <- joined_data %>% 
   group_by(country) %>% 
@@ -125,6 +123,8 @@ top_ten_carbon <- joined_data %>%
 # Data Visuals
 
 ### Data Visual 1
+
+Below we have created a visualization to show the relationship between the average life expectancy of humans across the world and consumption-based C02 emissions per capita over the years of 2000-2022. Our response variable (y) is life expectancy (in years) and our explanatory variable (x) is year (2000-2022). It is evident that carbon emissions increase over time as well as the average life expectancy. So, despite the higher amounts of carbon emissions in the atmosphere across the world, life expectancy has increased since 2000.
 
 ```{r}
 joined_data %>% 
@@ -171,6 +171,10 @@ vis_1_df %>%
 
 ### Data Visualization 2
 
+Below we have created another visualization to show the relationship between the average life expectancy of humans and consumption-based C02 emissions per capita in the top 10 countries with the highest C02 emissions.
+
+\*\*still need to finish this part once the graph is there!
+
 So this is just the general carbon emission vs life expectancy graph without considering the countries with the top ten carbon emissions
 
 ```{r}
@@ -195,6 +199,8 @@ top_ten_carbon %>%
 
 # Linear Regression
 
+We used linear regression to model the relationship between life expectancy (response variable) and carbon emissions (explanatory variable).
+
 ```{r}
 library(broom)
 
@@ -207,6 +213,16 @@ lm_data <- joined_data |>
 lm_crbn_life <- lm(avg_life~avg_crbn, data = lm_data)
 lm_crbn_life
 ```
+
+The model represents the relationship using the equation below:
+
+$$AverageLifeExpectancy = \beta_0 + \beta_1 * AverageCarbonEmissions + ε$$
+
+B0: This coefficient represents the average life expectancy when the average carbon emissions equal zero.
+
+B1: This coefficient represents the average carbon emissions and how much the average life expectancy changes for each additional unit of carbon emissions.
+
+ε: This represents the error term, which is the difference between the actual observed life expectancy and predicted life expectancy.
 
 ## Regression Model
 
