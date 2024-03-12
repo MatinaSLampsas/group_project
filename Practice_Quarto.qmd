@@ -212,9 +212,9 @@ lm_crbn_life
 
 ```{r}
 lm_crbn_life %>% 
-  ggplot(aes( x = .resid, y=.fitted))+
+  ggplot(aes( x = .fitted , y=.resid))+
   geom_jitter()+
-  geom_smooth(method = "lm")
+  geom_smooth(method = "loess")
 ```
 
 ## Model Fit
