@@ -7,6 +7,7 @@ format:
     embed-resources: true
     code-tools: true
     toc: true
+    code-fold: true
 editor: visual
 execute: 
   error: true
@@ -33,6 +34,7 @@ In the dataset for Consumption-Based CO2 Emissions Per Capita (`co2_pcap_cons.cs
 # Accessing libraries
 library(tidyverse)
 library(janitor)
+library(moderndive)
 ```
 
 ```{r}
@@ -217,20 +219,13 @@ lm_crbn_life %>%
 
 ## Model Fit
 
-Using the values from the regression model, the table is constructed below with the following data:
-
--   `var_y` represents the variance in the response values.
--   `var_y_hat` represents the variance in the fitted values.
--   `var_residual` represents the variance in the residuals.
--   `r_squared`represents the proportion of the spread/variation of the outcome variable `avg_life` explained by the model.
+Using the values from the regression model, the table is constructed below with the following variables: `var_y`, `var_y_hat`, `var_residual`, and `r_squared`. `var_y` represents the variance in the response values. `var_y_hat` represents the variance in the fitted values. `var_residual` represents the variance in the residuals. `r_squared`represents the proportion of the spread/variation of the outcome variable `avg_life` explained by the model.
 
 To evaluate the quality of the regression model, we compute the R^2^ value. The R^2^ value for the regression model is approximately 0.342. This means that around 34.2% of the variability in the response values is accounted for by the model.
 
 In terms of the "quality" of the model, this suggests a moderate level of fit. While the model does explain some of the variance in the response variable, a significant portion (approximately 65.8%) of the variance is not explained by the model. This could mean that there are other variables not included in the model that are influencing the response, or that the model is not capturing the relationship between the variables effectively.
 
 ```{r}
-library(moderndive)
-
 model_fit <- get_regression_points(lm_crbn_life) %>% 
   summarize(var_y = round(var(avg_life),1), 
                       var_y_hat = round(var(avg_life_hat),1), 
