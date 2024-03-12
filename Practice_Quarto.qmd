@@ -181,7 +181,7 @@ joined_data %>%
 
 ### OR alternative visual 2 (with the top 10 carbon emission countries)
 
-The issue with this graph is that there isn't enough points to really give us a lot of info unless we change up the table or use a different type of graph
+The issue with this graph is that there isn't enough points to really give us a lot of info unless we change up the table or use a different type of graph.
 
 ```{r}
 top_ten_carbon %>% 
