@@ -190,3 +190,27 @@ top_ten_carbon %>%
                        color = country)) +
   geom_point() 
 ```
+
+# Linear Regression
+
+```{r}
+library(broom)
+
+#create a new dataset similar to the top 10 country one but Instead let's use the data from all the countries to see the correlation between a countries average carbon emissions with the average life expectancy 
+lm_data <- joined_data |>
+  group_by(country) |>
+  summarise(avg_crbn = mean(carbon_emissions_tonnes, na.rm=T),
+         avg_life = mean(life_expectancy_years, na.rm=T))
+
+lm_crbn_life <- lm(avg_crbn~avg_life, data = lm_data)
+lm_crbn_life
+```
+
+## Regression Model
+
+```{r}
+lm_crbn_life %>% 
+  ggplot(aes( x = .resid, y=.fitted))+
+  geom_jitter()+
+  geom_smooth(method = "lm")
+```
