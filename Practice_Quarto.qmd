@@ -244,7 +244,15 @@ noise <- function(x, mean = 0, sd){
 simulations <- tibble(predicted_lf = noise(predictions, 
                                            sd = sig_data)
                    )
-head(simulations)
+
+sim_data <- lm_data |> 
+  filter(!is.na(avg_crbn), 
+         !is.na(avg_life)
+         ) |> 
+  select(avg_crbn, avg_life) |> 
+  bind_cols(simulations)
+
+head(sim_data)
 ```
 
 ```{r}
