@@ -256,25 +256,24 @@ head(sim_data)
 ```
 
 ```{r}
-predicted_plot <- simulations %>% 
-  ggplot(mapping = aes(x = predicted_lf)) +
-  geom_histogram( 
-                 color = "white"
-                 ) +
+predicted_plot <- sim_data %>% 
+  ggplot(mapping = aes(x = predicted_lf,
+                       y = avg_crbn)) +
+  geom_point() +
   labs(x = "Predicted Life Expectancy (years)",
        y = "",
-       subtitle = "Count") +
+       subtitle = "Avg Carbon Emissions",
+       title = "Observed ") +
   theme_bw()
 
-
-observed_plot <- lm_data %>% 
-  ggplot(mapping = aes(x=avg_life)) +
-  geom_histogram( 
-                 color = "white"
-                 ) +
+# the dataset here needs to be changed
+observed_plot <- lm_data %>%
+  ggplot(mapping = aes(x=avg_life,
+                       y = avg_crbn)) +
+  geom_point() +
   labs(x = "Observed Life Expectancy (years)",
        y = "",
-       subtitle = "Count") +
+       subtitle = "Avg Carbon Emissions") +
   theme_bw()
 
 observed_plot + predicted_plot
