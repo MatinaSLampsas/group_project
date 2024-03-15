@@ -20,7 +20,9 @@ execute:
 
 Higher CO2 emissions per capita are associated with lower life expectancy.
 
-## About the Data
+# 1 Data
+
+### 1.1 Data
 
 The data consists of two datasets that come from [Gapminder](https://www.gapminder.org/data/): Life Expectancy (`life_expectancy_at_birth.csv`) and Consumption-Based CO2 Emissions Per Capita (`co2_pcap_cons.csv`).
 
@@ -28,7 +30,6 @@ In the dataset for Life Expectancy (`life_expectancy_at_birth.csv`), the data co
 
 In the dataset for Consumption-Based CO2 Emissions Per Capita (`co2_pcap_cons.csv`), the data collected includes the average amount of carbon dioxide emissions per person, taking into account consumption patterns, across different countries. The dataset originally had 194 rows and 224 columns. After filtering and cleaning, the data consists of 194 rows and 24 columns with mainly double data types. Each row provides information about the CO2 emissions per capita for a particular country across years from 2000 to 2022. More information about this dataset and its documentation can be found here: [CO2 Emissions Consumption Historic Dataset](https://docs.google.com/spreadsheets/d/1t_GOXGrXQgSasIB7dWfRrq9dkqjrqwy3xHvywH7ah1A/edit#gid=501532268).
 
-## Data Set-Up
 
 ```{r}
 # Accessing libraries
@@ -47,7 +48,7 @@ carbon <-read_csv(here::here("Datasets/co2_pcap_cons.csv"))
 
 ```
 
-## Data Cleaning
+### 1.2 Data Cleaning
 
 ```{r}
 #cleaning carbon
@@ -64,7 +65,7 @@ clean_life_exp <- life_exp %>%
   select(country, `2000`:`2022`)
 ```
 
-## Pivot the Data Longer
+### 1.3 Pivoting Longer
 
 ```{r}
 # Pivot longer the clean carbon data: 
@@ -81,7 +82,11 @@ clean_life_exp <- clean_life_exp %>%
                values_to = "life_expectancy_years")
 ```
 
-## Joining the Data Sets:
+### 1.4 Data Cleaning
+
+Data before pivoting was cleaned in 1.2 so we did not have to perform Step 1.4: Data Cleaning.
+
+### 1.5 Joining Datasets
 
 ```{r}
 #joining the two cleaned data sets 
@@ -89,7 +94,7 @@ joined_data <- left_join(clean_carbon, clean_life_exp, by = c("country", "year")
 
 ```
 
-# Linear Regression
+# 2 Linear Regression
 
 ### Visual 1 Table
 
@@ -118,9 +123,9 @@ top_ten_carbon <- joined_data %>%
 
 ```
 
-# Data Visuals
+### 2.1 Data Visualization
 
-### Data Visual 1
+#### Data Visualization 1
 
 Below we created a visualization that illustrates the relationships between consumption-based C02 emissions per capita and life expectancy over the years 2000 to 2022, divided into three decades. Our response variable (y) is life expectancy (in years) and our explanatory variable (x) is year (2000-2022). In the 2000's the increase in carbon emissions appear to have a larger impact on life expectancy compared to the 2010's and 2020's. In the 2000's and the 2020's, countries with larger carbon emissions had a lower life expectancy while in the 2010's the life expectancy continued to slightly increase. In all three decades, the life expectancy began to plateau at around 15 tonnes of carbon emission.
 
@@ -144,7 +149,7 @@ joined_data %>%
 
 ```
 
-### Data Visualization 2
+#### Data Visualization 2
 
 Below we have created another visualization to show the relationship between the consumption-based C02 emissions per capita and the life expectancy averaged per country over the years 2000 to 2022. The graph indicates that there is likely not a linear relationship between the two variables. As the average carbon emissions increase between 0 and 5 tons, there is a sharp increase in average life expectancy. However life expectancy begins to plateau to around 75-80 years at 10 to 15 tons of carbon emissions. The overall trend is that as carbon emissions increase, life expectancy also increases, though at different rates.
 
@@ -160,11 +165,12 @@ joined_data %>%
   scale_color_brewer(palette = "Dark2") +
   labs(x = "Average Carbon Emissions per Capita (tonnes)",
        subtitle = "Average Life Expectancy",
-       y = "")
+       y = "") +
+  theme_bw()
   
 ```
 
-# Linear Regression
+### 2.2 Linear Regression
 
 We used linear regression to model the relationship between life expectancy (response variable) and carbon emissions (explanatory variable).
 
@@ -191,8 +197,6 @@ B1: This coefficient represents the average carbon emissions and how much the av
 
 ε: This represents the error term, which is the difference between the actual observed life expectancy and predicted life expectancy.
 
-## Regression Model
-
 The fanning of residuals suggests that a linear model is not appropriate and that equal variance is non-normal.
 
 ```{r}
@@ -202,7 +206,7 @@ lm_crbn_life %>%
   geom_smooth(method = "loess")
 ```
 
-## Model Fit
+### 2.3 Model Fit
 
 Using the values from the regression model, the table is constructed below with the following variables: `var_y`, `var_y_hat`, `var_residual`, and `r_squared`. `var_y` represents the variance in the response values. `var_y_hat` represents the variance in the fitted values. `var_residual` represents the variance in the residuals. `r_squared`represents the proportion of the spread/variation of the outcome variable `avg_life` explained by the model.
 
@@ -220,7 +224,9 @@ model_fit <- get_regression_points(lm_crbn_life) %>%
 knitr::kable((model_fit),format = "html")
 ```
 
-### 3.1
+## 3 Simulation
+
+### 3.1 Visualizing Simulations from the Model
 
 With your simple linear regression, generate predictions using the `predict()` function. Then, add random errors to the predictions, using the residual standard error estimated from the linear regression model (acquired with `sigma()`).
 
@@ -282,7 +288,7 @@ observed_plot + predicted_plot
   
 ```
 
-## 3.2
+### 3.2 Generating Multiple Predictive Checks
 
 ```{r}
 # Number of simulations
@@ -327,3 +333,5 @@ tibble(sims = sim_r_sq) |>
        subtitle = "Number of Simulated Models") +
   theme_bw()
 ```
+
+The histogram depicting the relationship between average lifespan and carbon emissions shows low R^2^ values, indicating that carbon emissions alone provide limited explanatory power for predicting lifespan. This suggests that the model currently does not generate data that closely approximates what is observed, likely due to the complex nature of the underlying relationship. Lifespan is influenced by many  factors beyond emissions, including socioeconomic status, public health infrastructure, and individual behaviors. Thus, the model may require additional variables to capture this complexity. The consistent but low R^2^ values across simulations also suggest a need for exploring non-linear relationships or interactions through more sophisticated statistical models. 
