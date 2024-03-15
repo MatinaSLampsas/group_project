@@ -285,8 +285,54 @@ observed_plot + predicted_plot
 ## 3.2
 
 ```{r}
-checks <- map_df(.x = 1:1000,
-                 .f = ~noise(predictions, sd = sig_data))
+nsims <- 1000
+sims <- map_dfc(.x = 1:nsims,
+                .f = ~ tibble(sim = noise(predictions, 
+                                          sd = sig_data)
+                              )
+                )
 
-checks 
+head(sims)
+
 ```
+
+```{r}
+colnames(sims) <- colnames(sims) |> 
+  str_replace(pattern = "\\.\\.\\.",
+                  replace = "_")
+
+sims
+```
+
+```{r}
+sims <- lm_data |> 
+  filter(!is.na(avg_crbn), 
+         !is.na(avg_life)) |> 
+  select(avg_life) |> 
+  bind_cols(sims)
+
+```
+
+```{r}
+sim_r_sq <- sims |> 
+  map(~ lm(avg_life ~ .x, data = sims)) |> 
+  map(glance) |> 
+  map_dbl(~ .x$r.squared)
+```
+```{r}
+head(sim_r_sq)
+```
+```{r}
+sim_r_sq <- sim_r_sq[names(sim_r_sq) != "avg_life"]
+```
+
+```{r}
+tibble(sims = sim_r_sq) |> 
+  ggplot(aes(x = sims)) + 
+  geom_histogram(binwidth = 0.025) +
+  labs(x = expression("Simulated"~ R^2),
+       y = "",
+       subtitle = "Number of Simulated Models") +
+  theme_bw()
+```
+
