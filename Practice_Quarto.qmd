@@ -40,10 +40,10 @@ library(patchwork)
 
 ```{r}
 # Load in the life expectancy csv
-life_exp <-read_csv(here::here("life_expectancy_at_birth.csv"))
+life_exp <-read_csv(here::here("Datasets/life_expectancy_at_birth.csv"))
 
 #load in the carbon emissions data 
-carbon <-read_csv(here::here("co2_pcap_cons.csv"))
+carbon <-read_csv(here::here("Datasets/co2_pcap_cons.csv"))
 
 ```
 
@@ -280,4 +280,13 @@ observed_plot <- lm_data %>%
 observed_plot + predicted_plot
 
   
+```
+
+## 3.2
+
+```{r}
+checks <- map_df(.x = 1:1000,
+                 .f = ~noise(predictions, sd = sig_data))
+
+checks 
 ```
