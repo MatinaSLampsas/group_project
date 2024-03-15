@@ -285,6 +285,7 @@ observed_plot + predicted_plot
 ## 3.2
 
 ```{r}
+# Number of simulations
 nsims <- 1000
 sims <- map_dfc(.x = 1:nsims,
                 .f = ~ tibble(sim = noise(predictions, 
@@ -292,41 +293,32 @@ sims <- map_dfc(.x = 1:nsims,
                               )
                 )
 
-head(sims)
-
-```
-
-```{r}
+# Renaming column names
 colnames(sims) <- colnames(sims) |> 
   str_replace(pattern = "\\.\\.\\.",
                   replace = "_")
 
-sims
-```
-
-```{r}
+# Add observed response to simulated data set
 sims <- lm_data |> 
   filter(!is.na(avg_crbn), 
          !is.na(avg_life)) |> 
   select(avg_life) |> 
   bind_cols(sims)
 
-```
-
-```{r}
+# Inspecting R2 values
 sim_r_sq <- sims |> 
   map(~ lm(avg_life ~ .x, data = sims)) |> 
   map(glance) |> 
   map_dbl(~ .x$r.squared)
-```
-```{r}
-head(sim_r_sq)
-```
-```{r}
+
+# Removing unwanted entry of avg_life
 sim_r_sq <- sim_r_sq[names(sim_r_sq) != "avg_life"]
+
 ```
 
+
 ```{r}
+# Plotting the simulated R2 values vs observed R2 values
 tibble(sims = sim_r_sq) |> 
   ggplot(aes(x = sims)) + 
   geom_histogram(binwidth = 0.025) +
@@ -335,4 +327,3 @@ tibble(sims = sim_r_sq) |>
        subtitle = "Number of Simulated Models") +
   theme_bw()
 ```
-
