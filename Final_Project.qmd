@@ -30,7 +30,6 @@ In the dataset for Life Expectancy (`life_expectancy_at_birth.csv`), the data co
 
 In the dataset for Consumption-Based CO2 Emissions Per Capita (`co2_pcap_cons.csv`), the data collected includes the average amount of carbon dioxide emissions per person, taking into account consumption patterns, across different countries. The dataset originally had 194 rows and 224 columns. After filtering and cleaning, the data consists of 194 rows and 24 columns with mainly double data types. Each row provides information about the CO2 emissions per capita for a particular country across years from 2000 to 2022. More information about this dataset and its documentation can be found here: [CO2 Emissions Consumption Historic Dataset](https://docs.google.com/spreadsheets/d/1t_GOXGrXQgSasIB7dWfRrq9dkqjrqwy3xHvywH7ah1A/edit#gid=501532268).
 
-
 ```{r}
 # Accessing libraries
 library(tidyverse)
@@ -95,33 +94,6 @@ joined_data <- left_join(clean_carbon, clean_life_exp, by = c("country", "year")
 ```
 
 # 2 Linear Regression
-
-### Visual 1 Table
-
-```{r}
-#The relationship between the two quantitative variables changing over time. 
-
-av_data <- joined_data %>% 
-  group_by(country) %>% 
-  summarise(avg_crbn = mean(carbon_emissions_tonnes, na.rm=T),
-         avg_life = mean(life_expectancy_years, na.rm=T))
-
-
-```
-
-### Visual 2 Table
-
-```{r}
-#finding the countries with the top 10 carbon emissions over 22 year average
-top_ten_carbon <- joined_data %>% 
-  group_by(country) %>% 
-  summarise(avg_crbn = mean(carbon_emissions_tonnes, na.rm=T),
-         avg_life = mean(life_expectancy_years, na.rm=T)) %>%
-  #slicing the countries with the top 10 carbon emissions so we can see what they are and how the life expectance vs carbon emissions changes over time
-  slice_max(avg_crbn, n=10) %>% 
-  arrange(desc(avg_crbn))
-
-```
 
 ### 2.1 Data Visualization
 
@@ -322,7 +294,6 @@ sim_r_sq <- sim_r_sq[names(sim_r_sq) != "avg_life"]
 
 ```
 
-
 ```{r}
 # Plotting the simulated R2 values vs observed R2 values
 tibble(sims = sim_r_sq) |> 
@@ -334,4 +305,4 @@ tibble(sims = sim_r_sq) |>
   theme_bw()
 ```
 
-The histogram depicting the relationship between average lifespan and carbon emissions shows low R^2^ values, indicating that carbon emissions alone provide limited explanatory power for predicting lifespan. This suggests that the model currently does not generate data that closely approximates what is observed, likely due to the complex nature of the underlying relationship. Lifespan is influenced by many  factors beyond emissions, including socioeconomic status, public health infrastructure, and individual behaviors. Thus, the model may require additional variables to capture this complexity. The consistent but low R^2^ values across simulations also suggest a need for exploring non-linear relationships or interactions through more sophisticated statistical models. 
+The histogram depicting the relationship between average lifespan and carbon emissions shows low R^2^ values, indicating that carbon emissions alone provide limited explanatory power for predicting lifespan. This suggests that the model currently does not generate data that closely approximates what is observed, likely due to the complex nature of the underlying relationship. Lifespan is influenced by many factors beyond emissions, including socioeconomic status, public health infrastructure, and individual behaviors. Thus, the model may require additional variables to capture this complexity. The consistent but low R^2^ values across simulations also suggest a need for exploring non-linear relationships or interactions through more sophisticated statistical models.
