@@ -16,7 +16,7 @@ execute:
   warning: false
 ---
 
-## Our Hypothesis
+# Our Hypothesis
 
 Higher CO2 emissions per capita are associated with lower life expectancy.
 
