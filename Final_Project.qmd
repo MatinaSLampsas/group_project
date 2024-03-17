@@ -163,8 +163,14 @@ The fanning of residuals suggests that a linear model is not appropriate and tha
 lm_crbn_life %>% 
   ggplot(aes( x = .fitted , y=.resid))+
   geom_jitter()+
-  geom_smooth(method = "loess")
+  geom_smooth(method = "loess")+
+    geom_smooth(method = "loess") +
+  labs(x = "Fitted Values",
+       y = "",
+       subtitle= "Residuals")
 ```
+
+The model does not satisfy the equal variance assumption. The graph above plots the fitted y - values, or life expectancies, to residuals and shows that there is an unequal spread of points following a fanned pattern.  A model that satisfies this assumption should have a random spread of points with now pattern that is not demonstrated in our model.
 
 ### 2.3 Model Fit
 
@@ -183,6 +189,40 @@ model_fit <- get_regression_points(lm_crbn_life) %>%
 
 knitr::kable((model_fit),format = "html")
 ```
+
+### Line Assumptions: 
+
+As shown by Visual 2, the linearity assumption is not satisfied. The scatterplot of average carbon emissions per capita in tonnes and average life expectancy show a curved pattern with steeper increases in life expectancy for every increase in smaller amount of carbon emissions, followed by a plateau. There is a weak positive, nonlinear relationship with several large residuals, high leverage points, and outliers. These outliers are most likely the points with average carbon emissions greater than 25 tonnes. This shape appears more like a log graph than a linear.
+
+### Independence:
+
+Independence is satisfied because life expectancy and carbon emissions are both averaged over the years 2000 to 2022, per country. Therefore, the average life expectancy of one country should not influence that of another.
+
+### Normality:
+
+```{r}
+lm_crbn_life %>%
+
+ggplot(aes(x = .resid)) +
+
+  geom_histogram(aes(y = ..density..)) +
+
+  geom_density (color = "dodgerblue",
+
+                lwd = 1.5) +
+
+  labs(x = "Residuals",
+
+       subtitle = "Density",
+
+       y = " ")
+```
+
+Normality is likely not satisfied. The graph below does not follow a normal distribution since the density curve shows that there are two peaks and a left skew. It is not a strong curve and some residuals appear as outliers in the left tail. Normality distributed residuals should ideally follow a bell shaped, normal curve, that is not demonstrated with our model.
+
+### Conclusion
+
+It is important to note that our model only satisfies the independence assumption, and not linearity, normally distributed residuals, or equal variance of residuals. As a result, a linear model is not best suited to explain the relationship between average carbon emissions and life expectancy, however we will continue to use our model as is.
 
 ## 3 Simulation
 
@@ -290,52 +330,3 @@ tibble(sims = sim_r_sq) |>
 ```
 
 The histogram depicting the relationship between average lifespan and carbon emissions shows low R^2^ values, indicating that carbon emissions alone provide limited explanatory power for predicting lifespan. This suggests that the model currently does not generate data that closely approximates what is observed, likely due to the complex nature of the underlying relationship. Lifespan is influenced by many factors beyond emissions, including socioeconomic status, public health infrastructure, and individual behaviors. Thus, the model may require additional variables to capture this complexity. The consistent but low R^2^ values across simulations also suggest a need for exploring non-linear relationships or interactions through more sophisticated statistical models.
-
-## Line Assumptions: 
-
-As shown by Visual 2, the linearity assumption is not satisfied. The scatterplot of average carbon emissions per capita in tonnes and average life expectancy show a curved pattern with steeper increases in life expectancy for every increase in smaller amount of carbon emissions, followed by a plateau. There is a weak positive, nonlinear relationship with several large residuals, high leverage points, and outliers. These outliers are most likely the points with average carbon emissions greater than 25 tonnes. This shape appears more like a log graph than a linear.
-
-## Independence:
-
-Independence is satisfied because life expectancy and carbon emissions are both averaged over the years 2000 to 2022, per country. Therefore, the average life expectancy of one country should not influence that of another.
-
-## Normality:
-
-```{r}
-lm_crbn_life %>%
-
-ggplot(aes(x = .resid)) +
-
-  geom_histogram(aes(y = ..density..)) +
-
-  geom_density (color = "dodgerblue",
-
-                lwd = 1.5) +
-
-  labs(x = "Residuals",
-
-       subtitle = "Density",
-
-       y = " ")
-```
-
-Normality is likely not satisfied. The graph below does not follow a normal distribution since the density curve shows that there are two peaks and a left skew. It is not a strong curve and some residuals appear as outliers in the left tail. Normality distributed residuals should ideally follow a bell shaped, normal curve, that is not demonstrated with our model.
-
-```{r}
-lm_crbn_life %>%
-
-  ggplot(aes( x = .fitted , y=.resid))+
-
-  geom_jitter()+
-
-  geom_smooth(method = "loess") +
-  labs(x = "Fitted Values",
-       y = "",
-       subtitle= "Residuals")
-```
-
-The model does not satisfy the equal variance assumption. The graph above plots the fitted y - values, or life expectancies, to residuals and shows that there is an unequal spread of points following a fanned pattern.  A model that satisfies this assumption should have a random spread of points with now pattern that is not demonstrated in our model.
-
-## Conclusion
-
-It is important to note that our model only satisfies the independence assumption, and not linearity, normally distributed residuals, or equal variance of residuals. As a result, a linear model is not best suited to explain the relationship between average carbon emissions and life expectancy, however we will continue to use our model as is.
