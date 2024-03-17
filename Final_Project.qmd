@@ -49,33 +49,28 @@ carbon <-read_csv(here::here("Datasets/co2_pcap_cons.csv"))
 
 ### 1.2 Data Cleaning
 
+The "Data Cleaning" and "Pivoting Longer" steps are put into one pipeline. Missing values were handled using the *na.omit()* function in order to remove missing values from the two respective data frames. The column names were also changed from character type to numeric type for ease of plotting graphs in future steps. 
+
+### 1.3 Pivoting Longer
+
+For the "Pivoting Longer" steps, the years were consolidated into one column *year* and respective values are put into their variables of *carbon_emissions_tonnes* and *life_expectancy_years*.
+
 ```{r}
 #cleaning carbon
 clean_carbon <- carbon %>% 
   na.omit() %>% 
   mutate(across(.cols = `2000`:`2022`, 
                 .fns = ~as.numeric(.x))) %>% 
-  select(country, `2000`:`2022`)
+  select(country, `2000`:`2022`) |> 
+  pivot_longer(cols = !country,
+               names_to = "year",
+               values_to = "carbon_emissions_tonnes")
 
 clean_life_exp <- life_exp %>% 
   na.omit() %>% 
   mutate(across(.cols = `2000`:`2022`, 
                 .fns = ~as.numeric(.x))) %>% 
-  select(country, `2000`:`2022`)
-```
-
-### 1.3 Pivoting Longer
-
-```{r}
-# Pivot longer the clean carbon data: 
-clean_carbon <- clean_carbon %>%
-  pivot_longer(cols = !country,
-               names_to = "year",
-               values_to = "carbon_emissions_tonnes")
-
-
-# Pivot longer the clean life expectancy data:
-clean_life_exp <- clean_life_exp %>%
+  select(country, `2000`:`2022`) |> 
   pivot_longer(cols = !country,
                names_to = "year",
                values_to = "life_expectancy_years")
@@ -83,14 +78,17 @@ clean_life_exp <- clean_life_exp %>%
 
 ### 1.4 Data Cleaning
 
-Data before pivoting was cleaned in 1.2 so we did not have to perform Step 1.4: Data Cleaning.
+Data before pivoting was cleaned in 1.2 so it was not necessary to perform "Step 1.4: Data Cleaning".
 
 ### 1.5 Joining Datasets
+
+After joining the cleaned datasets to create the final dataset, the years included are from 2000 to 2022 and there are 194 countries. The explanatory variable is `carbon_emissions_tonnes` and the response variable is `life_expectancy_years`. 
 
 ```{r}
 #joining the two cleaned data sets 
 joined_data <- left_join(clean_carbon, clean_life_exp, by = c("country", "year"))
-
+joined_data
+length(unique(joined_data$country))
 ```
 
 # 2 Linear Regression
