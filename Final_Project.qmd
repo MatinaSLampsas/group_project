@@ -1,6 +1,6 @@
 ---
 title: "STAT 331 Group Project"
-author: "Katrina, Matina, Lindsey, Kaviya"
+author: "Katrina, Matina, Lindsay, Kaviya"
 format: 
   html:
     self-contained: true
@@ -20,9 +20,7 @@ execute:
 
 Higher CO2 emissions per capita are associated with lower life expectancy.
 
-# 1 Data
-
-### 1.1 Data
+# The Data
 
 The data consists of two datasets that come from [Gapminder](https://www.gapminder.org/data/): Life Expectancy (`life_expectancy_at_birth.csv`) and Consumption-Based CO2 Emissions Per Capita (`co2_pcap_cons.csv`).
 
@@ -47,11 +45,9 @@ carbon <-read_csv(here::here("Datasets/co2_pcap_cons.csv"))
 
 ```
 
-### 1.2 Data Cleaning
+### Cleaning and Pivoting our Data
 
 The "Data Cleaning" and "Pivoting Longer" steps are put into one pipeline. Missing values were handled using the `na.omit()` function in order to remove missing values from the two respective data frames. The column names were also changed from character type to numeric type for ease of plotting graphs in future steps.
-
-### 1.3 Pivoting Longer
 
 For the "Pivoting Longer" steps, the years were consolidated into one column `year` and respective values are put into their variables of `carbon_emissions_tonnes` and `life_expectancy_years`.
 
@@ -76,11 +72,9 @@ clean_life_exp <- life_exp %>%
                values_to = "life_expectancy_years")
 ```
 
-### 1.4 Data Cleaning
-
 Data before pivoting was cleaned in the initial step "1.2 Data Cleaning" so it was not necessary to perform the additional step "Step 1.4: Data Cleaning".
 
-### 1.5 Joining Datasets
+### Joining out Data into One Data set 
 
 After joining the cleaned datasets to create the final dataset, the years included are from 2000 to 2022 and there are 194 countries. The explanatory variable is `carbon_emissions_tonnes` and the response variable is `life_expectancy_years`.
 
@@ -89,11 +83,9 @@ After joining the cleaned datasets to create the final dataset, the years includ
 joined_data <- left_join(clean_carbon, clean_life_exp, by = c("country", "year"))
 ```
 
-# 2 Linear Regression
+# Linear Regression
 
-### 2.1 Data Visualization
-
-#### Data Visualization 1
+#### Data Visualization #1
 
 Below, a visualization was created that illustrates the relationships between consumption-based CO~2~ emissions per capita and life expectancy over the years 2000 to 2022, divided into three decades. Our response variable (*y*) is life expectancy (in years) and our explanatory variable (*x*) is year (2000-2022). In the 2000's, the increase in carbon emissions appear to have a larger impact on life expectancy compared to the 2010's and 2020's. In the 2000's and the 2020's, countries with larger carbon emissions had a lower life expectancy while in the 2010's the life expectancy continued to slightly increase. In all three decades, the life expectancy began to plateau at around 15 tonnes of carbon emission.
 
@@ -117,9 +109,9 @@ joined_data %>%
 
 ```
 
-#### Data Visualization 2
+#### Data Visualization #2
 
-Below we have created another visualization to show the relationship between the consumption-based CO~2~ emissions per capita and the life expectancy averaged per country over the years 2000 to 2022. The graph indicates that there is likely not a linear relationship between the two variables. As the average carbon emissions increase between 0 and 5 tons, there is a sharp increase in average life expectancy. However life expectancy begins to plateau to around 75-80 years at 10 to 15 tons of carbon emissions. The overall trend is that as carbon emissions increase, life expectancy also increases, though at different rates.
+Below we have created another visualization to show the relationship between the consumption-based CO~2~ emissions per capita and the life expectancy averaged per country over the years 2000 to 2022. We plotted the data using a scatter (jitter) plot and we overlaid a loess smoother using the geom_smooth function. The graph indicates that there is likely not a linear relationship between the two variables. As the average carbon emissions increase between 0 and 5 tons, there is a sharp increase in average life expectancy. However life expectancy begins to plateau to around 75-80 years at 10 to 15 tons of carbon emissions. The overall trend is that as carbon emissions increase, life expectancy also increases, though at different rates. The graph below shows a positive association between the two variables (average life expectancy and average carbon emissions per capita) and forms a somewhat linear pattern at the start, but then dips and becomes more of a quadratic shape. There appear to be several outliers in the data that are far from the blue line, suggesting potential anomalies.
 
 ```{r}
 joined_data %>% 
@@ -132,13 +124,11 @@ joined_data %>%
   geom_smooth(method = "loess") +
   scale_color_brewer(palette = "Dark2") +
   labs(x = "Average Carbon Emissions per Capita (tonnes)",
-       subtitle = "Average Life Expectancy",
+       subtitle = "Average Life Expectancy (years)",
        y = "") +
   theme_bw()
   
 ```
-
-### 2.2 Linear Regression
 
 We used linear regression to model the relationship between the response variable of `life_expectancy_years` and the explanatory variable of `carbon_emissions_tonnes`.
 
@@ -146,16 +136,18 @@ We used linear regression to model the relationship between the response variabl
 library(broom)
 
 #create a new dataset similar to the top 10 country one but Instead let's use the data from all the countries to see the correlation between a countries average carbon emissions with the average life expectancy 
+
 lm_data <- joined_data |>
   group_by(country) |>
   summarise(avg_crbn = mean(carbon_emissions_tonnes, na.rm=T),
          avg_life = mean(life_expectancy_years, na.rm=T))
 
 lm_crbn_life <- lm(avg_life~avg_crbn, data = lm_data)
-lm_crbn_life
+crbn_coefficients <- tidy(lm_crbn_life)
+crbn_coefficients
 ```
 
-The model represents the relationship using the equation: $$AverageLifeExpectancy = \beta_0 + \beta_1 * AverageCarbonEmissions + ε$$. The coefficient ***B~0~*** represents the average life expectancy when the average carbon emissions equal zero. The coefficient ***B~1~*** represents the average carbon emissions and how much the average life expectancy changes for each additional unit of carbon emissions. ***ε*** represents the error term, which is the difference between the actual observed life expectancy and predicted life expectancy.
+The model represents the relationship using the equation: $$AverageLifeExpectancy = 66.512\beta_0 + 0.8325\beta_1 + ε$$. The coefficient ***B~0~*** represents the average life expectancy when the average carbon emissions equal zero. The coefficient ***B~1~*** represents the average carbon emissions and how much the average life expectancy changes for each additional unit of carbon emissions. ***ε*** represents the error term, which is the difference between the actual observed life expectancy and predicted life expectancy.
 
 The fanning of residuals suggests that a linear model is not appropriate and that equal variance is non-normal.
 
@@ -172,7 +164,7 @@ lm_crbn_life %>%
 
 The model does not satisfy the equal variance assumption. The graph above plots the fitted y - values, or life expectancies, to residuals and shows that there is an unequal spread of points following a fanned pattern.  A model that satisfies this assumption should have a random spread of points with now pattern that is not demonstrated in our model.
 
-### 2.3 Model Fit
+### Model Fit
 
 Using the values from the regression model, the table is constructed below with the following variables: `var_y`, `var_y_hat`, `var_residual`, and `r_squared`. `var_y` represents the variance in the response values. `var_y_hat` represents the variance in the fitted values. `var_residual` represents the variance in the residuals. `r_squared`represents the proportion of the spread/variation of the outcome variable `avg_life` explained by the model.
 
@@ -190,7 +182,7 @@ model_fit <- get_regression_points(lm_crbn_life) %>%
 knitr::kable((model_fit),format = "html")
 ```
 
-### Line Assumptions: 
+### Line Assumptions:
 
 As shown by Visual 2, the linearity assumption is not satisfied. The scatterplot of average carbon emissions per capita in tonnes and average life expectancy show a curved pattern with steeper increases in life expectancy for every increase in smaller amount of carbon emissions, followed by a plateau. There is a weak positive, nonlinear relationship with several large residuals, high leverage points, and outliers. These outliers are most likely the points with average carbon emissions greater than 25 tonnes. This shape appears more like a log graph than a linear.
 
@@ -224,9 +216,7 @@ Normality is likely not satisfied. The graph below does not follow a normal dist
 
 It is important to note that our model only satisfies the independence assumption, and not linearity, normally distributed residuals, or equal variance of residuals. As a result, a linear model is not best suited to explain the relationship between average carbon emissions and life expectancy, however we will continue to use our model as is.
 
-## 3 Simulation
-
-### 3.1 Visualizing Simulations from the Model
+## Simulation of Our Data
 
 With our simple linear regression, predictions were generated using the `predict()` function. Random errors were added to the predictions using the residual standard error estimated from the linear regression model, which were acquired with the `sigma()` function.
 
@@ -284,7 +274,7 @@ observed_plot + predicted_plot
   
 ```
 
-### 3.2 Generating Multiple Predictive Checks
+### Predictive Checks
 
 ```{r}
 # Number of simulations
